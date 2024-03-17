@@ -1,65 +1,94 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Jun 19 10:09:39 2023
+Created on Mon Mar 18, 2024
 
 @author: shirafujilab
 """
 
 import numpy as np
-import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.gridspec as gridspec
 
 
 class Graphics:
-    def __init__(self, filter_mode, ):
+    def __init__(self, master):
+        """
+        Initialize Graphics
+        master: widget of Tkinter
+        """
 
-        # graphic spaces
-        self.fig = plt.figure(figsize=(6, 4))
-        
-        
-
-
-        self.R1 = R1
-        self.R2 = R2
-        self.C1 = C1
-        self.C2 = C2
-    
-
+        self.master = master
+        self.fig = Figure(figsize=(10, 8), dpi = 100)
+        self.gs = gridspec.GridSpec(2, 1, figure = self.fig)
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self.master)
+        self.canvas.draw()
+        self.canvas.get_tk_widget().grid(row=0, column=1, sticky="nsew")
 
 
-    
-    def main(self):
-        # プロットする周波数範囲を設定 (ここでは0Hzから5000Hzまでを例とします)
-        frequencies = np.linspace(1, 5000, 5000)
+    def plot_results_amp(self, config, freq, amp_response):
 
-        # 各周波数における周波数特性を計算
-        amp, phase = self.bpf(frequencies)
-        
-        # 利得をプロット
-        plt.figure(figsize=(10,12))
-        gs=gridspec.GridSpec(2,1)
-        
-        plt.subplot(gs[0,0])
-        plt.plot(frequencies, amp)
-        plt.xlabel('Amplitude')
-        plt.ylabel('phase')
-        plt.title('Amplitude Response of the Bandpass Filter')
-        plt.grid(True)
-        
-        plt.subplot(gs[1,0])
-        plt.plot(frequencies, np.rad2deg(phase))
-        plt.xlabel('Frequency (Hz)')
-        plt.ylabel('phase')
-        plt.title('Frequency Response of the Bandpass Filter')
-        plt.grid(True)
-        plt.show()
+        """
+        Graphic amplotude characteristics
+        config = {
+            "scale": "normal" or "log",
+            "freq_mode": "normal" or "log",
+            "amp_mode": "normal" or "dB",
+        }
+        freq: numpy array
+        amp_resoponse: numpy array
+        """
 
 
-if __name__ == "__main__":
-    R1 = 50*1000
-    R2 = 10*1000
-    C1 = 100*10**(-9)
-    C2 = 10*10**(-9)
-    
-    instance = GainToFrequency(R1, R2, C1, C2)
-    instance.main()
+        ax1 = self.fig.add_subplot(self.gs[0, 0])
+        ax1.clear()
+        ax1.plot(freq, amp_response)
+        # Set horizontal scale
+        if config["freq_mode"] == "normal":
+            pass
+        elif config["freq_mode"] == "log":
+            ax1.set_xscale(config["freq_mode"])
+
+        # Set vertical scale
+        if config["scale"] == "normal":
+            pass
+        elif config["scale"] == "dB":
+            amp_response = 20*np.log10(amp_response)
+            ax1.set_yscale("log")
+
+        # Name each labels
+        ax1.set_xlabel("Frequency (Hz)")
+        if config["scale"] == "normal":
+            ax1.set_ylabel("Amplitude")
+        elif config["scale"] == "dB":
+            ax1.set_ylabel("Amplitude (dB)")
+
+        ax1.set_title("Amplitude Response")
+        self.canvas.draw()
+
+
+    def plot_results_phase(self, config, freq, ph_response):
+
+        """
+        Graphic amplotude characteristics
+        config: same as results_amp
+        freq: numpy array
+        amp_resoponse: numpy array
+        """
+
+        ax2 = self.fig.add_subplot(self.gs[1, 0])
+        ax2.clear()
+        ax2.plot(freq, ph_response)
+
+        # Set horizontal scale (for fitting results_amp)
+        if config["freq_mode"] == "normal":
+            pass
+        elif config["freq_mode"] == "log":
+            ax2.set_xscale(config["freq_mode"])
+
+        # Name each labels
+        ax2.set_xlabel("Frequency (Hz)")
+        ax2.set_ylabel("Phase (degrees)")
+
+        ax2.set_title("Phase Response")
+        self.canvas.draw()

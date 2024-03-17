@@ -8,8 +8,6 @@ Purpose:
     ControlPanel: Handles the initialization and configuration of the main GUI window,
     integrates with the Graphics module for plotting, and sets up the initial parameters for the application.
 
-    ToDo:
-        fig
 
 """
 
@@ -31,33 +29,41 @@ from sims.bpf import BPF
 class ControlPanel:
     def __init__(self, init_params):
         """Initialize ControlPanel with given parameters and setup the GUI."""
-        self.root = tk.Tk()
-        self.params = init_params  # Store initial parameters for later use
-
         # graphic array
         self.freq = np.arange(0, 10000, 1)
         self.results_amp = np.full(10000, 0)
-        
-        
+        self.results_freq = np.full(10000, 0)
+
+        # init tkinter
+        self.root = tk.Tk()
+
+        # init parameter
+        self.params = init_params  # Store initial parameters for later use
+
+        # Set widgets
+        self.set_widget()
 
 
     def run(self):
+
+        self.root.mainloop()
+
+
+    def set_widget(self):
+        # Initialize GUI
+        self.root.title("Control Panel")    #Set a title for the window
+        self.root.geometry("800x600")   # Initial size of the main window
+        self.root.minsize(800,600)      # Minimum size of the main window
+
         # Set up MainWindow
         self.setupMainWindow()
 
-        # Start the GUI configuration
+        # Set up Figure canvas
+        self.graphic_results = Graphics(self.root)
         self.create_plot_area()
 
-        # Calculate and plot
-        self.calculate_and_plot()
-
-        # Start the GUI configuration
-        self.create_plot_area()
-
-        calculate_button = ttk.Button(self.root, text="Calc.", command=self.calculate_and_plot)
-        calculate_button.grid(row=1, column=1, sticky="ew")
-
-        self.root.mainloop()
+        # Set up Buttons
+        self.create_buttons()
 
 
     def setupMainWindow(self):
@@ -65,11 +71,26 @@ class ControlPanel:
         self.main_window = MainWindow(self.params, self.root)
 
 
+    def create_buttons(self):
+        """Set Buttons"""
+        calculate_button = ttk.Button(self.root, text="Calc.", command=self.calculate_and_plot)
+        calculate_button.grid(row=1, column=1, sticky="ew")
+
+
+    def create_plot_area(self):
+        """Create and embed a figure in the Tkinter window for plotting."""
+        # Create figure
+        self.fig = Figure(figsize=(5, 4), dpi=100)
+        self.plot = self.fig.add_subplot(111)
+
+        # Examplt plot
+        self.calculate_and_plot() # Plots test data
+
+
     def calculate_and_plot(self):
 
         # Get parameter and filter type from GUI
         params = self.main_window.get_parameter_values()
-        print(params)
         filter_type = self.main_window.filter_type.get()
 
         # Calling adequately functions
@@ -80,47 +101,19 @@ class ControlPanel:
         elif filter_type == "BPF":
             self.results_amp, self.results_freq = BPF.calculate_response_bpf(params, self.freq)
         
-        self.plot.clear()
-        
-        # log scale
-        self.plot.set_xscale("log")
-        
-        
-        self.plot.plot(self.freq, self.results_amp)
-        self.canvas.draw()
+        #self.plot.clear()
+        config = {
+            "scale" : "log",
+            "freq_mode": "log",
+            "amp_mode": "dB",
+        }
+
+        self.graphic_results.plot_results_amp(config, self.freq, self.results_amp)
+        self.graphic_results.plot_results_phase(config, self.freq, self.results_freq)
 
 
-    def GUI_config(self):
-        """Configure the main GUI window, setting size and initializeing MainWindow."""
-        self.root.title("Control Panel")    #Set a title for the window
-        self.root.geometry("800x600")   # Initial size of the main window
-        self.root.minsize(800,600)      # Minimum size of the main window
-
-        # After setting up the main window, create the plot area
-        self.create_plot_area()
-
-        # Initialize and configure the MainWindow with root as its parent
-        self.main_window = MainWindow(self.root)
-
-        self.root.mainloop()    # Start the GUI event  loop
 
 
-    def create_plot_area(self):
-        """Create and embed a figure in the Tkinter window for plotting."""
-        # Create figure
-        self.fig = Figure(figsize=(5, 4), dpi=100)
-        self.plot = self.fig.add_subplot(111)
-
-        # Examplt plot
-        self.plot.plot(self.freq, self.results_amp) # Plots test data
-        
-        # log scale
-        self.plot.set_xscale("log")
-
-        # Embed a figure in the Tkinter window
-        self.canvas = FigureCanvasTkAgg(self.fig, master=self.root) # Specify Tkinter window for master
-        self.canvas.draw()
-        self.canvas.get_tk_widget().grid(row=0, column=1, sticky="nsew")
 
 
 if __name__ == "__main__":
