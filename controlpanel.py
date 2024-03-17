@@ -103,11 +103,12 @@ class ControlPanel:
         
         #self.plot.clear()
         config = {
-            "scale" : "log",
+            "scale" : "dB",
             "freq_mode": "log",
             "amp_mode": "dB",
         }
 
+        self.graphic_results.initialize_figure()
         self.graphic_results.plot_results_amp(config, self.freq, self.results_amp)
         self.graphic_results.plot_results_phase(config, self.freq, self.results_freq)
 
