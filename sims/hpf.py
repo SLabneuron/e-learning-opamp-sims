@@ -22,11 +22,16 @@ class HPF:
         frac1 = 1j * omega * R2 * C1
         frac2 = 1 + 1j  * omega * R1 * C1
         transfer_function = -frac1/frac2
-        
+
         # Calculate for amplitude response
         amplitude_response = np.abs(transfer_function)
-        
+
         # Calculate for phase response
-        phase_response = np.angle(transfer_function)
-        
-        return amplitude_response, phase_response
+        phase_response = np.angle(transfer_function)*180/np.pi
+
+        max_gain = np.max(amplitude_response)
+        cutoff_gain = max_gain*np.sqrt(1/2)
+        cutoff_freq_index = np.argmin(np.abs(amplitude_response - cutoff_gain))
+        cutoff_freq = freq[cutoff_freq_index]
+
+        return amplitude_response, phase_response, cutoff_freq

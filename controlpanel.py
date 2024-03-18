@@ -34,18 +34,28 @@ class ControlPanel:
         self.results_amp = np.full(10000, 0)
         self.results_freq = np.full(10000, 0)
 
-        # init tkinter
-        self.root = tk.Tk()
-
         # init parameter
         self.params = init_params  # Store initial parameters for later use
+
+        # config
+        self.config = {
+            "haxis" : "log",        # horizontal-axis
+            "vaxis": "log",         # vertical-axis
+            "xlim_left" : 0,        # left of xlim
+            "xlim_right": 10000,    # right of xlim
+            "ylim_left" : -20,      # left of ylim
+            "ylim_right": 0,        # right of ylim
+        }
+
+        # init tkinter
+        self.root = tk.Tk()
 
         # Set widgets
         self.set_widget()
 
 
     def run(self):
-
+        """GUI Loop"""
         self.root.mainloop()
 
 
@@ -60,6 +70,9 @@ class ControlPanel:
 
         # Set up Figure canvas
         self.graphic_results = Graphics(self.root)
+
+        self.create_output_console()
+
         self.create_plot_area()
 
         # Set up Buttons
@@ -71,17 +84,20 @@ class ControlPanel:
         self.main_window = MainWindow(self.params, self.root)
 
 
+    def create_output_console(self):
+        """Set up Output Console"""
+        self.output_console = tk.Text(self.root, height=2, state=tk.DISABLED)
+        self.output_console.grid(row=2, column=0)
+
+
     def create_buttons(self):
         """Set Buttons"""
-        calculate_button = ttk.Button(self.root, text="Calc.", command=self.calculate_and_plot)
-        calculate_button.grid(row=1, column=1, sticky="ew")
+        calculate_button = ttk.Button(self.root, padding=10, text="Calc.", command=self.calculate_and_plot)
+        calculate_button.grid(row=3, column=0)
 
 
     def create_plot_area(self):
         """Create and embed a figure in the Tkinter window for plotting."""
-        # Create figure
-        self.fig = Figure(figsize=(5, 4), dpi=100)
-        self.plot = self.fig.add_subplot(111)
 
         # Examplt plot
         self.calculate_and_plot() # Plots test data
@@ -95,34 +111,36 @@ class ControlPanel:
 
         # Calling adequately functions
         if filter_type == "LPF":
-            self.results_amp, self.results_freq = LPF.calculate_response_lpf(params, self.freq)
+            self.results_amp, self.results_freq, cutoff_freq = LPF.calculate_response_lpf(params, self.freq)
         elif filter_type == "HPF":
-            self.results_amp, self.results_freq = HPF.calculate_response_hpf(params, self.freq)
+            self.results_amp, self.results_freq, cutoff_freq = HPF.calculate_response_hpf(params, self.freq)
         elif filter_type == "BPF":
-            self.results_amp, self.results_freq = BPF.calculate_response_bpf(params, self.freq)
-        
-        #self.plot.clear()
-        config = {
-            "scale" : "dB",
-            "freq_mode": "log",
-            "amp_mode": "dB",
-        }
+            self.results_amp, self.results_freq, lower_cutoff_freq, upper_cutoff_freq  = BPF.calculate_response_bpf(params, self.freq)
 
         self.graphic_results.initialize_figure()
-        self.graphic_results.plot_results_amp(config, self.freq, self.results_amp)
-        self.graphic_results.plot_results_phase(config, self.freq, self.results_freq)
+        self.graphic_results.plot_results_amp(self.config, filter_type, self.freq, self.results_amp)
+        self.graphic_results.plot_results_phase(self.config, filter_type, self.freq, self.results_freq)
 
-
-
-
+        # Output logs every filter
+        print(filter_type)
+        if (filter_type == "LPF") or (filter_type == "HPF"):
+            console_text1 = f"          Filter type : {filter_type}"
+            console_text2 = f"-3dB cutoff frequency : {cutoff_freq}Hz "
+        elif filter_type == "BPF":
+            console_text1 = f"          Filter type : {filter_type}"
+            console_text2 = f"    Bandwidth at -3dB : {lower_cutoff_freq}Hz ~ {upper_cutoff_freq}Hz"
+        self.output_console.config(state=tk.NORMAL) # Enable to edit text widget
+        self.output_console.delete("1.0", tk.END)
+        self.output_console.insert(tk.END, console_text1 + "\n" + console_text2)
+        self.output_console.config(state=tk.DISABLED) # Unable to edit text widget
 
 
 if __name__ == "__main__":
     """Initial paramters for the application, used for setup or configuration"""
     init_params = {
-        "R1": {"value": 100, "unit": "kohm"},
+        "R1": {"value": 10, "unit": "kohm"},
         "R2": {"value": 10, "unit": "kohm"},
-        "C1": {"value": 0.01, "unit": "uF"},
+        "C1": {"value": 0.1, "unit": "uF"},
         "C2": {"value": 0.01, "unit": "uF"},
     }
 
