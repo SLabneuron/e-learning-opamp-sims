@@ -8,6 +8,7 @@ Created on Mon Mar 18, 2024
 import numpy as np
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.ticker import MultipleLocator
 import matplotlib.gridspec as gridspec
 
 
@@ -26,7 +27,7 @@ class Graphics:
         self.fig = Figure(figsize=(8, 3), dpi = 100)
         self.gs = gridspec.GridSpec(2, 3, height_ratios= [5,1], width_ratios= [6,1,6], figure = self.fig)
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.master)
-        self.canvas.get_tk_widget().grid(row=1, column=0, pady=5, sticky="nsew")
+        self.canvas.get_tk_widget().grid(row=1, column=0, columnspan = 2, pady=5, sticky="nsew")
         self.ax1 = self.fig.add_subplot(self.gs[0, 0])
         self.ax2 = self.fig.add_subplot(self.gs[0, 2])
         self.canvas.draw()
@@ -49,11 +50,14 @@ class Graphics:
         amp_resoponse: numpy array
         """
 
+        # calculate dB
+        amp_response = 20*np.log10(amp_response)
+
         # clear plot
         self.ax1.clear()
 
         # plot
-        self.ax1.plot(freq, amp_response)
+        self.ax1.plot(freq, amp_response, linewidth = 3)
 
         # Set horizontal axis
         if config["haxis"] == "log":
@@ -67,8 +71,9 @@ class Graphics:
 
         # Set vertical axis
         if config["vaxis"] == "log":
-            self.ax1.set_yscale("log")
+            self.ax1.set_yscale("linear")
             self.ax1.set_ylabel("Gain [dB]")
+            self.ax1.yaxis.set_major_locator(MultipleLocator(3))
             self.ax1.set_ylim(config["ylim_left"], config["ylim_right"])
         else:
             self.ax1.set_yscale("linear")
@@ -94,7 +99,7 @@ class Graphics:
         self.ax2.clear()
 
         # plot
-        self.ax2.plot(freq, ph_response, ".", markersize=1.2)
+        self.ax2.plot(freq, ph_response, "o", markersize = 2)
 
         # Set horizontal axis
         if config["haxis"] == "log":
@@ -108,10 +113,12 @@ class Graphics:
 
         self.ax2.set_yscale("linear")
         self.ax2.set_ylabel("Phase [degrees]")
+        self.ax2.yaxis.set_major_locator(MultipleLocator(90))
+        self.ax2.yaxis.set_minor_locator(MultipleLocator(30))
         
-        if filter_type == "LPF": self.ax2.set_ylim(90, 200)
-        elif filter_type == "HPF": self.ax2.set_ylim(-200, -90)
-        else: self.ax2.set_ylim(-200,  200)
+        if filter_type == "LPF": self.ax2.set_ylim(90, 180)
+        elif filter_type == "HPF": self.ax2.set_ylim(-180, -90)
+        else: self.ax2.set_ylim(-180,  180)
 
         self.ax2.set_title("Phase Response")
         self.ax2.grid(color="black", linewidth = 0.2, which="minor", axis="both")

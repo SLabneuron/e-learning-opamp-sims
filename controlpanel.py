@@ -12,6 +12,7 @@ Purpose:
 """
 
 # Import necessary modules
+import os
 import numpy as np
 import tkinter as tk
 from tkinter import ttk
@@ -41,11 +42,19 @@ class ControlPanel:
         self.config = {
             "haxis" : "log",        # horizontal-axis
             "vaxis": "log",         # vertical-axis
-            "xlim_left" : 0,        # left of xlim
+            "xlim_left" : 10,        # left of xlim
             "xlim_right": 10000,    # right of xlim
             "ylim_left" : -20,      # left of ylim
             "ylim_right": 0,        # right of ylim
         }
+        
+        self.paths = {
+            "lpf_path" : os.path.abspath("figs\\lpf.jpg"),
+            "hpf_path" : os.path.abspath("figs\\hpf.jpg"),
+            "bpf_path" : os.path.abspath("figs\\bpf.jpg"),
+        }
+
+
 
         # init tkinter
         self.root = tk.Tk()
@@ -81,19 +90,25 @@ class ControlPanel:
 
     def setupMainWindow(self):
         """Set up MainWindow"""
-        self.main_window = MainWindow(self.params, self.root)
+        self.main_window = MainWindow(self.params, self.root, self.paths)
 
 
     def create_output_console(self):
         """Set up Output Console"""
         self.output_console = tk.Text(self.root, height=2, state=tk.DISABLED)
-        self.output_console.grid(row=2, column=0)
+        self.output_console.grid(row=2, column=0, columnspan = 2)
 
 
     def create_buttons(self):
+        """ wrapper function"""
+        def wrapper():
+            self.calculate_and_plot()
+            self.main_window.create_schematic()
+            
+        
         """Set Buttons"""
-        calculate_button = ttk.Button(self.root, padding=10, text="Calc.", command=self.calculate_and_plot)
-        calculate_button.grid(row=3, column=0)
+        calculate_button = ttk.Button(self.root, padding=10, text="Calc.", command=wrapper)
+        calculate_button.grid(row=3, column=0, columnspan = 2)
 
 
     def create_plot_area(self):

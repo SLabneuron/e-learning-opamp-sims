@@ -9,17 +9,21 @@ Purpose:
 
 """
 
+import os
+
 import tkinter as tk
 from tkinter import ttk
+from PIL import Image, ImageTk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
 
 class MainWindow:
-    def __init__(self, params, root):
+    def __init__(self, params, root, paths):
         """Initialize the main window"""
         self.params = params
         self.root = root
+        self.paths = paths
         self.units ={}
         self.create_widgets()
 
@@ -60,6 +64,9 @@ class MainWindow:
 
         # Create parameter select
         self.create_param_box()
+
+        # Create schematic corresponding to filter select
+        self.create_schematic()
 
 
     def create_filter_type(self):
@@ -103,8 +110,41 @@ class MainWindow:
             factor = {"ohm":1, "kohm": 1e3, "Mohm":1e6,
                       "F":1, "uF":1e-6, "nF":1e-9, "pF":1e-12}.get(unit, 1)
             self.params[param] = base_value * factor
-        
+
         return self.params
+
+
+    def create_schematic(self):
+
+        # Create a schematic for easy understanding
+        self.schematic_frame = ttk.Frame(self.root)
+        self.schematic_frame.grid(row=0, column=1, sticky="nw")
+
+        # Select graphics for filter_type
+        filter_type = self.filter_type.get()
+        if filter_type == "LPF":
+            image_path = self.paths["lpf_path"]
+        elif filter_type == "HPF":
+            image_path = self.paths["hpf_path"]
+        elif filter_type == "BPF":
+            image_path = self.paths["bpf_path"]
+        else:
+            print("Unknown filter type.")
+            return
+
+        # Import and resize image
+        original_image = Image.open(image_path)
+        base_width = 300
+        wpercent = (base_width/float(original_image.size[0]))
+        hsize = int((float(original_image.size[1]) * float(wpercent)))
+        image = original_image.resize((base_width, hsize), Image.ANTIALIAS)
+
+        self.photo = ImageTk.PhotoImage(image)
+
+        label = tk.Label(self.schematic_frame, image = self.photo)
+        self.image=self.photo
+        label.pack()
+
 
 
 def main():
