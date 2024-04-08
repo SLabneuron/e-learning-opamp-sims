@@ -1,18 +1,25 @@
-# e-learning: Op-Amp sims
+# Welcome to e-learning: Op-Amp sims
 
- This simulator is designed as a learning tool for operational amplifiers (op-amps), 
-focusing on first-order active filters (currently). 
- The project also serves as an introductory material for learning GUI operations in Python.
- The content will be updated regularly.
- For feature requests, please submit Pull Requests.
- I'm grateful for your request, and wellcome for you.
+Our simulator provides a dynamics, user-friendly platform for mastering the intricacies of operational amplifiers,
+with a current focus on first-order active filters. 
+It's perfect for students, educators, and enthusiasts looking to deepen their understanding of electronics through interactive learning.
 
-## Environments  
+## Quick Start
+To get started with the op-amp simulator:
+
+1. Ensure you have Python 3.9 and above installed on Windows 11.
+2. Close the repository to your local machine.
+3. Install the required libraries using 'pip install library-name' (ex. pip install numpy).
+4. Run the main application file to launch the simulator.
+
+We're committed to continuous improvement and eagerly await your suggestions and contributuions. Thank you for being a part of our learning community!
+
+### Environments (recommended)
 
 - Windows 11  
 - Python 3.9 and above
 
-## Libraries
+### Libraries
 
 - os  
 - numpy  
@@ -50,3 +57,5 @@ This is an educational project, and the following are premitted:
 
 If you're interested in collaborating or sharing your ideas,
 pleaase reach out to us at the email address provided below.
+
+s.shirafuji@ieee.org
