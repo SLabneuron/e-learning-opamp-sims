@@ -53,9 +53,9 @@ This is an educational project, and the following are premitted:
 ・Commoerical use (please contact us first)
 ・Sharing on social mead platforms like YouTube
 
-## Contanct us (me)
+## Contanct us
 
 If you're interested in collaborating or sharing your ideas,
-pleaase reach out to us at the email address provided below.
+please reach out to us at the email address provided below.
 
 s.shirafuji@ieee.org
