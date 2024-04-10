@@ -41,17 +41,9 @@ We are currently working on the following features:
 
 ## Contributution
 
-Those who wish to contribute can do so by submitting a Pull Request or contacting us at the email address listed below. 
+Those who wish to contribute can do so by submitting a Pull Request or contacting us at the email address listed below.
 Feedback and suggestions for additional features are always welcome.
 
-## Licenses
-
-This is an educational project, and the following are premitted:
-
-・Reproduction
-・Modification
-・Commoerical use (please contact us first)
-・Sharing on social mead platforms like YouTube
 
 ## Contanct us
 
