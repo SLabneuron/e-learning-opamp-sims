@@ -143,14 +143,19 @@ venv.bak/
 .dmypy.json
 dmypy.json
 
+
 # Pyre type checker
 .pyre/
 
+# vs code
+.vscode/
+
+
 # pytype static type analyzer
-.pytype/
+# .pytype/
 
 # Cython debug symbols
-cython_debug/
+# cython_debug/
 
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
