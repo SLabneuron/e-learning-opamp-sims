@@ -49,11 +49,21 @@ class ControlPanel:
             "ylim_left" : -20,      # left of ylim
             "ylim_right": 0,        # right of ylim
         }
+
+        # get current directory
+        cur_dir = os.path.dirname(os.path.abspath(__file__))
+
+        # get paths
+        lpf_path = os.path.join(cur_dir, "figs", "lpf.jpg")
+        hpf_path = os.path.join(cur_dir, "figs", "hpf.jpg")
+        bpf_path = os.path.join(cur_dir, "figs", "bpf.jpg")
         
+        print("cur_dir",cur_dir, "\n", "lpf:", lpf_path, "hpf:", hpf_path, "bpf:", bpf_path)
+
         self.paths = {
-            "lpf_path" : os.path.abspath("figs\\lpf.jpg"),
-            "hpf_path" : os.path.abspath("figs\\hpf.jpg"),
-            "bpf_path" : os.path.abspath("figs\\bpf.jpg"),
+            "lpf_path" : lpf_path,  #os.path.abspath(lpf_path),
+            "hpf_path" : hpf_path,  #os.path.abspath(hpf_path),
+            "bpf_path" : bpf_path,  #os.path.abspath(bpf_path),
         }
 
 
