@@ -20,11 +20,11 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
-from graphics.graphics import Graphics  # Graphical plotting of characteristics
-from GUI.main_window import MainWindow  # Main GUI window configuration
-from sims.lpf import LPF
-from sims.hpf import HPF
-from sims.bpf import BPF
+from src.graphics.graphics import Graphics  # Graphical plotting of characteristics
+from src.GUI.main_window import MainWindow  # Main GUI window configuration
+from src.sims.lpf import LPF
+from src.sims.hpf import HPF
+from src.sims.bpf import BPF
 
 
 class ControlPanel:
@@ -54,9 +54,9 @@ class ControlPanel:
         cur_dir = os.path.dirname(os.path.abspath(__file__))
 
         # get paths
-        lpf_path = os.path.join(cur_dir, "figs", "lpf.jpg")
-        hpf_path = os.path.join(cur_dir, "figs", "hpf.jpg")
-        bpf_path = os.path.join(cur_dir, "figs", "bpf.jpg")
+        lpf_path = os.path.join(cur_dir, "data", "image", "lpf.jpg")
+        hpf_path = os.path.join(cur_dir, "data", "image", "hpf.jpg")
+        bpf_path = os.path.join(cur_dir, "data", "image", "bpf.jpg")
         
         print("cur_dir",cur_dir, "\n", "lpf:", lpf_path, "hpf:", hpf_path, "bpf:", bpf_path)
 
