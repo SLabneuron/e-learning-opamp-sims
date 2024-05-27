@@ -43,7 +43,7 @@ class ControlPanel:
         # config
         self.config = {
             "haxis" : "log",        # horizontal-axis
-            "vaxis": "log",         # vertical-axis
+            "vaxis": "log",      # vertical-axis
             "xlim_left" : 10,        # left of xlim
             "xlim_right": 10000,    # right of xlim
             "ylim_left" : -20,      # left of ylim
