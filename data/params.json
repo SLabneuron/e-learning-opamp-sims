@@ -1,0 +1,44 @@
+
+
+{
+
+    "params_elements" : {
+
+        "R1" : 10,
+        "R1_scale" : "kohm",
+        "R2" : 10,
+        "R2_scale" : "kohm",
+        "C1" : 0.1,
+        "C1_scale" : "uF",
+        "C2" : 0.01,
+        "C2_scale" : "uF"
+    },
+
+    "R_scale" : {
+        "ohm" : 1,
+        "kohm" : 1e3,
+        "Mohm" : 1e6
+    },
+
+    "C_scale" : {
+        "F" : 1,
+        "uF" : 1e-6,
+        "nF" : 1e-9,
+        "pF" : 1e-12
+    },
+
+    "sim_params" : {
+        "freq_l" : 10,
+        "freq_r" : 10000,
+        "amp_l_log" : -15,
+        "amp_h_log" : 0,
+        "amp_l_lin" : 0,
+        "amp_h_lin" : 1,
+        "haxis" : "log",
+        "vaxis" : "log"
+    }
+
+
+
+
+}
