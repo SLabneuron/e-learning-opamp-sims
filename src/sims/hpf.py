@@ -8,14 +8,27 @@ Puropose:
     This code calculate first order high-pass filter (HPF)
 """
 
+# import standard library
 import numpy as np
+
+# import my library
+from ..gui_config.utils.param_recal import recalculate
 
 class HPF:
     def calculate_response_hpf(params, freq):
 
-        # parameters
-        for key in params:
-            globals()[key] = params[key]
+        """ Init """
+
+        # Elements
+        elements = ["R1", "R2", "C1", "C2"]
+
+        # Recalculate parameters
+        dicts = recalculate(params, elements)
+
+        # Declare recalculate parameters
+        for key in dicts: globals()[key] = dicts[key]
+
+        """ Calculation """
 
         # Calculate transfer function
         omega = 2*np.pi*freq

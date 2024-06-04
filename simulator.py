@@ -47,6 +47,7 @@ class ControlPanel:
         self.root.mainloop()
 
 
+
     def set_gui(self):
 
         """ Set GUI """
@@ -55,7 +56,7 @@ class ControlPanel:
         self.root = tk.Tk()
 
         # Set widgets
-        self.main_window = MainWindow(self.root, self.params)
+        MainWindow(self.root, self.params)
 
 
     def get_path(self):
@@ -72,9 +73,9 @@ class ControlPanel:
 
         # set path
         self.paths = {
-            "lpf_path" : os.path.abspath(lpf_path),
-            "hpf_path" : os.path.abspath(hpf_path),
-            "bpf_path" : os.path.abspath(bpf_path),
+            "LPF_path" : os.path.abspath(lpf_path),
+            "HPF_path" : os.path.abspath(hpf_path),
+            "BPF_path" : os.path.abspath(bpf_path),
         }
 
         self.params["paths"] = self.paths

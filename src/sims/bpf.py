@@ -8,14 +8,28 @@ Puropose:
     This code calculate first order band-pass filter (BPF)
 """
 
+# import standard library
 import numpy as np
+
+# import my library
+from ..gui_config.utils.param_recal import recalculate
+
 
 class BPF:
     def calculate_response_bpf(params, freq):
 
-        # parameters
-        for key in params:
-            globals()[key] = params[key]
+        """ Init """
+
+        # Elements
+        elements = ["R1", "R2", "C1", "C2"]
+
+        # Recalculate parameters
+        dicts = recalculate(params, elements)
+
+        # Declare recalculate parameters
+        for key in dicts: globals()[key] = dicts[key]
+
+        """ Calculation """
 
         # Calculate transfer function
         omega = 2*np.pi*freq
@@ -44,7 +58,7 @@ class BPF:
             if amplitude_response[i] <cutoff_gain:
                 upper_cutoff_freq = freq[i-1]
                 break
-        
+
         print(max_gain, lower_cutoff_freq, upper_cutoff_freq)
 
         return amplitude_response, phase_response, lower_cutoff_freq, upper_cutoff_freq
