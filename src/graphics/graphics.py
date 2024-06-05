@@ -45,11 +45,13 @@ class Graphics:
 
     def calculate_and_plot(self, params):
 
-        # Make freq
-        freq = np.arange(params["sim_params"]["freq_l"], params["sim_params"]["freq_r"], 1)
-
-        # Get Filter Type
+        # Set Parameters
+        freq_l = float(params["dynamic_sim_params"]["freq_l"].get())
+        freq_r = float(params["dynamic_sim_params"]["freq_r"].get())
         filter_type = params["dynamic_params"]["filter_type"].get()
+
+        # Make freq
+        freq = np.arange(freq_l, freq_r, 1)
 
         # Calling adequately functions
         if filter_type == "LPF": self.results_amp, self.results_freq, cutoff_freq = LPF.calculate_response_lpf(params, freq)
@@ -76,35 +78,35 @@ class Graphics:
 
     def plot_results_amp(self, params, freq, amp_response):
 
-        # calculate dB
-        if params["sim_params"]["vaxis"] == "log": amp_response = 20*np.log10(amp_response)
+        # Set Parameters
+        haxis = params["dynamic_sim_params"]["haxis"].get()
+        vaxis = params["dynamic_sim_params"]["vaxis"].get()
+        amp_l = float(params["dynamic_sim_params"]["amp_l"].get())
+        amp_h = float(params["dynamic_sim_params"]["amp_h"].get())
 
-        # clear plot
+        # Transform to "dB"
+        if vaxis == "log": amp_response = 20*np.log10(amp_response)
+
+        # clear and plot
         self.ax1.clear()
-
-        # plot
         self.ax1.plot(freq, amp_response, linewidth = 3)
 
-        # Set horizontal axis
-        if params["sim_params"]["haxis"] == "log":
-            self.ax1.set_xscale("log")
-            self.ax1.set_xlabel("Frequency [Hz]")
-            self.ax1.set_xlim(params["sim_params"]["freq_l"], params["sim_params"]["freq_r"])
-        else:
-            self.ax1.set_xscale("linear")
-            self.ax1.set_xlabel("Frequency [Hz]")
-            self.ax1.set_xlim(params["sim_params"]["freq_l"], params["sim_params"]["freq_r"])
+        # Get horizontal scale
+        if haxis == "log": self.ax1.set_xscale("log")
+        else: self.ax1.set_xscale("linear")
 
-        # Set vertical axis
-        if params["sim_params"]["vaxis"] == "log":
-            self.ax1.set_yscale("linear")
+        # Config of horizontal axis
+        self.ax1.set_xlabel("Frequency [Hz]")
+        self.ax1.set_xlim(freq[0], freq[-1])
+
+        # Config of vertical axis
+        if vaxis == "log":
             self.ax1.set_ylabel("Gain [dB]")
             self.ax1.yaxis.set_major_locator(MultipleLocator(3))
-            self.ax1.set_ylim(params["sim_params"]["amp_l_log"], params["sim_params"]["amp_h_log"])
         else:
-            self.ax1.set_yscale("linear")
             self.ax1.set_ylabel("|Vout/Vin|")
-            self.ax1.set_ylim(params["sim_params"]["amp_l_lin"], params["sim_params"]["amp_h_lin"])
+
+        self.ax1.set_ylim(amp_l, amp_h)
 
         self.ax1.set_title("Amplitude Response")
         self.ax1.grid(color="black", linewidth = 0.2, which="minor", axis="both")
@@ -114,23 +116,22 @@ class Graphics:
 
     def plot_results_phase(self, params, freq, ph_response):
 
-        # clear plot
-        self.ax2.clear()
+        # Set Parameters
+        haxis = params["dynamic_sim_params"]["haxis"].get()
+        vaxis = params["dynamic_sim_params"]["vaxis"].get()
+        filter_type = params["dynamic_params"]["filter_type"].get()
 
-        # plot
+        # clear  and plot
+        self.ax2.clear()
         self.ax2.plot(freq, ph_response, "o", markersize = 2)
 
-        # Set horizontal axis
-        if params["sim_params"]["haxis"] == "log":
-            self.ax2.set_xscale("log")
-            self.ax2.set_xlabel("Frequency [Hz]")
-            self.ax2.set_xlim(params["sim_params"]["freq_l"], params["sim_params"]["freq_r"])
-        else:
-            self.ax2.set_xscale("linear")
-            self.ax2.set_xlabel("Frequency [Hz]")
-            self.ax2.set_xlim(params["sim_params"]["freq_l"], params["sim_params"]["freq_r"])
+        # Get horizontal scale
+        if haxis == "log": self.ax2.set_xscale("log")
+        else: self.ax2.set_xscale("linear")
 
-        self.ax2.set_yscale("linear")
+        # General Config
+        self.ax2.set_xlabel("Frequency [Hz]")
+        self.ax2.set_xlim(freq[0], freq[-1])
         self.ax2.set_ylabel("Phase [degrees]")
         self.ax2.yaxis.set_major_locator(MultipleLocator(90))
         self.ax2.yaxis.set_minor_locator(MultipleLocator(30))

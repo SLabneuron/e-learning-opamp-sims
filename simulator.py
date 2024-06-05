@@ -24,7 +24,7 @@ import tkinter as tk
 from src.gui_config.main_window import MainWindow  # Main GUI window configuration
 
 
-class ControlPanel:
+class Simulator:
 
     def __init__(self, init_params):
 
@@ -94,7 +94,7 @@ if __name__ == "__main__":
         params = json.load(j)
 
     # Create an Instance of ControlPanel
-    control_panel = ControlPanel(params)
+    control_panel = Simulator(params)
 
     # Execute Simulator
     control_panel.run()
