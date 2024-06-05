@@ -151,7 +151,7 @@ dmypy.json
 .vscode/
 
 # data_result_ignore
-data/results_sims/
+data/results_sims/*
 !data/results_sims/.gitkeep
 
 

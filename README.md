@@ -16,26 +16,26 @@ We're committed to continuous improvement and eagerly await your suggestions and
 
 ### Environments (recommended)
 
-- Windows 11  
+- Windows 11
 - Python 3.9 and above
 
 ### Libraries
 
-- os  
-- numpy  
-- tkinter  
-- matplotlib  
+- os
+- numpy
+- tkinter
+- matplotlib
 
 ## On goning Work
 
 We are currently working on the following features:
 
 - Input funtionality for experimental value.
-- Save feature for the current state of simulators.
+- ~~Save feature for the current state of simulators.~~
 - Expansion of filter types available in the simulator.
-- Intuitive filter design features like Ltspice
+- Intuitive filter design features like Ltspice.
 - Addition of passive filters for educational purposes.
-- Enhancement of graphic for a more polished user interface.
+- ~~Enhancement of graphic for a more polished user interface.~~
 - Addition of a feature to display slopes in dB/octave and dB/decade on the console.
 
 
@@ -50,4 +50,4 @@ Feedback and suggestions for additional features are always welcome.
 If you're interested in collaborating or sharing your ideas,
 please reach out to us at the email address provided below.
 
-s.shirafuji@ieee.org
+shirafujilab2@gmail.com
