@@ -47,7 +47,6 @@ class Simulator:
         self.root.mainloop()
 
 
-
     def set_gui(self):
 
         """ Set GUI """
@@ -70,12 +69,14 @@ class Simulator:
         lpf_path = os.path.join(cur_dir, "data", "image", "lpf.jpg")
         hpf_path = os.path.join(cur_dir, "data", "image", "hpf.jpg")
         bpf_path = os.path.join(cur_dir, "data", "image", "bpf.jpg")
+        save_path = os.path.join(cur_dir, "data", "results_sims")
 
         # set path
         self.paths = {
             "LPF_path" : os.path.abspath(lpf_path),
             "HPF_path" : os.path.abspath(hpf_path),
             "BPF_path" : os.path.abspath(bpf_path),
+            "save_path": os.path.abspath(save_path),
         }
 
         self.params["paths"] = self.paths

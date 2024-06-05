@@ -17,10 +17,9 @@ Purpose:
 # Import standard library
 import tkinter as tk
 from tkinter import ttk
-from PIL import Image, ImageTk
+from PIL import ImageTk
 
-from ..graphics.graphics import Graphics
-from ..gui_config.utils.image_utils import load_image
+from .utils.image_utils import load_image
 
 class ControlFrame:
 
@@ -30,10 +29,6 @@ class ControlFrame:
 
         # Get Parent Class
         self.main_window = main_window
-
-        # Uniform
-        self.main_window.params["dynamic_params"] = {}
-        self.main_window.params["dynamic_sim_params"] = {}
 
         # Set Frame
         self.create_control_frame()

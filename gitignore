@@ -150,6 +150,9 @@ dmypy.json
 # vs code
 .vscode/
 
+# data_result_ignore
+data/results_sims/*
+
 
 # pytype static type analyzer
 # .pytype/

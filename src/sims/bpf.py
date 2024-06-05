@@ -28,7 +28,7 @@ class BPF:
 
         # Declare recalculate parameters
         for key in dicts: globals()[key] = dicts[key]
-        
+
         # retrun
 
         """ Calculation """
@@ -46,25 +46,25 @@ class BPF:
         phase_response = np.angle(transfer_function)*180/np.pi
 
         # Calculation Cutoff Frequency
-        max_gain = np.max(amplitude_response)
-        cutoff_gain = max_gain*np.sqrt(1/2)
-        max_gain_index = np.argmax(amplitude_response)
+        #max_gain = np.max(amplitude_response)
+        #cutoff_gain = max_gain*np.sqrt(1/2)
+        #max_gain_index = np.argmax(amplitude_response)
 
 
-        for i in range(max_gain_index, 0, -1):
-            if amplitude_response[i] < cutoff_gain:
-                lower_cutoff_freq = freq[i+1]
-                break
-            else:
-                lower_cutoff_freq = None
+        #for i in range(max_gain_index, 0, -1):
+        #    if amplitude_response[i] < cutoff_gain:
+        #        lower_cutoff_freq = freq[i+1]
+        #        break
+        #    else:
+        #        lower_cutoff_freq = None
 
-        for i in range(max_gain_index, len(freq), 1):
-            if amplitude_response[i] <cutoff_gain:
-                upper_cutoff_freq = freq[i-1]
-                break
-            else:
-                upper_cutoff_freq = None
+        #for i in range(max_gain_index, len(freq), 1):
+        #    if amplitude_response[i] <cutoff_gain:
+        #        upper_cutoff_freq = freq[i-1]
+        #        break
+        #    else:
+        #        upper_cutoff_freq = None
 
-        print(max_gain, lower_cutoff_freq, upper_cutoff_freq)
+        #print(max_gain, lower_cutoff_freq, upper_cutoff_freq)
 
-        return amplitude_response, phase_response, lower_cutoff_freq, upper_cutoff_freq
+        return amplitude_response, phase_response

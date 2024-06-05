@@ -42,9 +42,4 @@ class HPF:
         # Calculate for phase response
         phase_response = np.angle(transfer_function)*180/np.pi
 
-        max_gain = np.max(amplitude_response)
-        cutoff_gain = max_gain*np.sqrt(1/2)
-        cutoff_freq_index = np.argmin(np.abs(amplitude_response - cutoff_gain))
-        cutoff_freq = freq[cutoff_freq_index]
-
-        return amplitude_response, phase_response, cutoff_freq
+        return amplitude_response, phase_response

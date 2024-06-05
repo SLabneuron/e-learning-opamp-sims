@@ -28,12 +28,13 @@ class Graphics:
         self.set_figure()
 
         # Init Plot
-        self.calculate_and_plot(self.main_window.params)
+        self.main_window.calculate()
+        self.plots(self.main_window.params)
 
 
     def set_figure(self):
 
-        self.fig = Figure(figsize=(8, 3), dpi = 100)
+        self.fig = Figure(figsize=(8, 2.7), dpi = 100)
         self.gs = gridspec.GridSpec(2, 3, height_ratios= [5,1], width_ratios= [6,1,6], figure = self.fig)
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.main_window.root)
         self.canvas.get_tk_widget().grid(row=3, column=0, columnspan =4, pady=5, sticky="nsew")
@@ -43,42 +44,18 @@ class Graphics:
         self.canvas.draw()
 
 
-    def calculate_and_plot(self, params):
+    def plots(self, params):
 
-        # Set Parameters
-        freq_l = float(params["dynamic_sim_params"]["freq_l"].get())
-        freq_r = float(params["dynamic_sim_params"]["freq_r"].get())
-        filter_type = params["dynamic_params"]["filter_type"].get()
-
-        # Make freq
-        freq = np.arange(freq_l, freq_r, 1)
-
-        # Calling adequately functions
-        if filter_type == "LPF": self.results_amp, self.results_freq, cutoff_freq = LPF.calculate_response_lpf(params, freq)
-        elif filter_type == "HPF": self.results_amp, self.results_freq, cutoff_freq = HPF.calculate_response_hpf(params, freq)
-        elif filter_type == "BPF": self.results_amp, self.results_freq, lower_cutoff_freq, upper_cutoff_freq  = BPF.calculate_response_bpf(params, freq)
-
-        # self.set_figure()
-        self.plot_results_amp(params, freq, self.results_amp)
-        self.plot_results_phase(params, freq, self.results_freq)
-
-        # Output logs every filter
-        if (filter_type == "LPF") or (filter_type == "HPF"):
-            console_text1 = f"          Filter type : {filter_type}"
-            console_text2 = f"-3dB cutoff frequency : {cutoff_freq}Hz "
-        elif filter_type == "BPF":
-            console_text1 = f"          Filter type : {filter_type}"
-            console_text2 = f"    Bandwidth at -3dB : {lower_cutoff_freq}Hz ~ {upper_cutoff_freq}Hz"
-
-        #self.output_console.config(state=tk.NORMAL) # Enable to edit text widget
-        #self.output_console.delete("1.0", tk.END)
-        #self.output_console.insert(tk.END, console_text1 + "\n" + console_text2)
-        #self.output_console.config(state=tk.DISABLED) # Unable to edit text widget
+        self.plot_results_amp(params)
+        self.plot_results_phase(params)
 
 
-    def plot_results_amp(self, params, freq, amp_response):
+    def plot_results_amp(self, params):
 
-        # Set Parameters
+        # Get Values and Set parameters
+        freq = params["results"]["freq"]
+        amp_response = params["results"]["amp"]
+
         haxis = params["dynamic_sim_params"]["haxis"].get()
         vaxis = params["dynamic_sim_params"]["vaxis"].get()
         amp_l = float(params["dynamic_sim_params"]["amp_l"].get())
@@ -114,14 +91,16 @@ class Graphics:
         self.canvas.draw()
 
 
-    def plot_results_phase(self, params, freq, ph_response):
+    def plot_results_phase(self, params):
 
-        # Set Parameters
+        # Get Values and Set parameters
+        freq = params["results"]["freq"]
+        ph_response = params["results"]["phase"]
+
         haxis = params["dynamic_sim_params"]["haxis"].get()
-        vaxis = params["dynamic_sim_params"]["vaxis"].get()
         filter_type = params["dynamic_params"]["filter_type"].get()
 
-        # clear  and plot
+        # clear and plot
         self.ax2.clear()
         self.ax2.plot(freq, ph_response, "o", markersize = 2)
 
@@ -136,9 +115,8 @@ class Graphics:
         self.ax2.yaxis.set_major_locator(MultipleLocator(90))
         self.ax2.yaxis.set_minor_locator(MultipleLocator(30))
 
-
-        if params["dynamic_params"]["filter_type"].get() == "LPF": self.ax2.set_ylim(90, 180)
-        elif params["dynamic_params"]["filter_type"].get() == "HPF": self.ax2.set_ylim(-180, -90)
+        if filter_type == "LPF": self.ax2.set_ylim(90, 180)
+        elif filter_type == "HPF": self.ax2.set_ylim(-180, -90)
         else: self.ax2.set_ylim(-180,  180)
 
         self.ax2.set_title("Phase Response")
