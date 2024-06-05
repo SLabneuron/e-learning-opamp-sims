@@ -152,7 +152,7 @@ dmypy.json
 
 # data_result_ignore
 data/results_sims/
-#!data/results_sims/.gitkeep
+!data/results_sims/.gitkeep
 
 
 # pytype static type analyzer
